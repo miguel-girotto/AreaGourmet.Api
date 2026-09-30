@@ -99,7 +99,7 @@ namespace AreaGourmet.Api.Migrations
                     b.ToTable("Enderecos");
                 });
 
-            modelBuilder.Entity("AreaGourmet.Api.Models.EstoqueInsumo", b =>
+            modelBuilder.Entity("AreaGourmet.Api.Models.EstoqueBebida", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,9 +107,8 @@ namespace AreaGourmet.Api.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("NomeInsumo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("QuantidadeAtual")
                         .HasColumnType("decimal(65,30)");
@@ -119,7 +118,10 @@ namespace AreaGourmet.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EstoqueInsumos");
+                    b.HasIndex("ProdutoId")
+                        .IsUnique();
+
+                    b.ToTable("EstoqueBebidas");
                 });
 
             modelBuilder.Entity("AreaGourmet.Api.Models.ItemPedido", b =>
@@ -286,6 +288,17 @@ namespace AreaGourmet.Api.Migrations
                     b.Navigation("Cliente");
                 });
 
+            modelBuilder.Entity("AreaGourmet.Api.Models.EstoqueBebida", b =>
+                {
+                    b.HasOne("AreaGourmet.Api.Models.Produto", "Produto")
+                        .WithOne("EstoqueBebida")
+                        .HasForeignKey("AreaGourmet.Api.Models.EstoqueBebida", "ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
+                });
+
             modelBuilder.Entity("AreaGourmet.Api.Models.ItemPedido", b =>
                 {
                     b.HasOne("AreaGourmet.Api.Models.Pedido", "Pedido")
@@ -356,6 +369,8 @@ namespace AreaGourmet.Api.Migrations
 
             modelBuilder.Entity("AreaGourmet.Api.Models.Produto", b =>
                 {
+                    b.Navigation("EstoqueBebida");
+
                     b.Navigation("ItensPedido");
                 });
 #pragma warning restore 612, 618

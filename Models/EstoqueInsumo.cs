@@ -1,12 +1,14 @@
 namespace AreaGourmet.Api.Models;
 
-public class EstoqueInsumo
+public class EstoqueBebida
 {
     public int Id { get; set; }
 
-    public string NomeInsumo { get; set; } = string.Empty;
+    public int ProdutoId { get; set; }
 
     public decimal QuantidadeAtual { get; set; }
 
     public decimal QuantidadeMinima { get; set; }
+
+    public Produto Produto { get; set; } = null!;
 }

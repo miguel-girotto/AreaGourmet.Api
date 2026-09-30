@@ -24,5 +24,16 @@ public class AppDbContext : DbContext
 
     public DbSet<ItemPedido> ItensPedido { get; set; }
 
-    public DbSet<EstoqueInsumo> EstoqueInsumos { get; set; }
+    public DbSet<EstoqueBebida> EstoqueBebidas { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<EstoqueBebida>()
+            .HasOne(e => e.Produto)
+            .WithOne(p => p.EstoqueBebida)
+            .HasForeignKey<EstoqueBebida>(e => e.ProdutoId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }
