@@ -1,0 +1,47 @@
+@model AreaGourmet.Api.Models.Cliente
+
+@{
+    ViewData["Title"] = "Excluir Cliente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-custom border-danger p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-danger-subtle text-danger p-2 rounded-circle me-2">
+                        <i class="bi bi-exclamation-triangle fs-5"></i>
+                    </span>
+                    <h4 class="card-title mb-0 fw-bold text-danger">Confirmar Exclusão</h4>
+                </div>
+                <p class="text-muted">Tem certeza de que deseja remover permanentemente este cliente do sistema?</p>
+                <hr class="text-muted" />
+
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 text-muted">ID:</dt>
+                    <dd class="col-sm-8 fw-semibold">#@Model.Id</dd>
+
+                    <dt class="col-sm-4 text-muted">Nome:</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.Nome</dd>
+
+                    <dt class="col-sm-4 text-muted">Telefone:</dt>
+                    <dd class="col-sm-8">@Model.Telefone</dd>
+
+                    <dt class="col-sm-4 text-muted">Cadastrado em:</dt>
+                    <dd class="col-sm-8">@Model.DataCadastro.ToString("dd/MM/yyyy HH:mm")</dd>
+                </dl>
+
+                <form action="/clientes/excluir/@Model.Id" method="post">
+                    <div class="d-flex justify-content-between">
+                        <a href="/clientes" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-1"></i> Confirmar Exclusão
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

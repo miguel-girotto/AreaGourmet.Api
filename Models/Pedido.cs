@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AreaGourmet.Api.Models;
 
 public class Pedido
@@ -12,6 +14,8 @@ public class Pedido
 
     public int? EnderecoId { get; set; }
 
+    [Required(ErrorMessage = "Informe o tipo de atendimento")]
+    [StringLength(50)]
     public string TipoAtendimento { get; set; } = string.Empty;
 
     public int? NumeroMesa { get; set; }
@@ -22,11 +26,14 @@ public class Pedido
 
     public decimal ValorTotal { get; set; }
 
+    [Required(ErrorMessage = "Informe o metodo de pagamento")]
+    [StringLength(30)]
     public string FormaPagamento { get; set; } = string.Empty;
 
     public string Status { get; set; } = string.Empty;
 
     public DateTime DataHora { get; set; } = DateTime.Now;
+
 
     public Usuario Usuario { get; set; } = null!;
 
@@ -34,5 +41,5 @@ public class Pedido
 
     public Endereco? Endereco { get; set; }
 
-    public List<ItemPedido> Itens { get; set; } = new();
+    public ICollection<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
 }

@@ -1,0 +1,76 @@
+@model AreaGourmet.Api.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalhes do Cliente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card card-custom p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-info-subtle text-info p-2 rounded-circle me-2">
+                        <i class="bi bi-person-lines-fill fs-5"></i>
+                    </span>
+                    <h4 class="card-title mb-0 fw-bold">Detalhes do Cliente</h4>
+                </div>
+                <hr class="text-muted" />
+
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 text-muted">ID:</dt>
+                    <dd class="col-sm-8 fw-semibold">#@Model.Id</dd>
+
+                    <dt class="col-sm-4 text-muted">Nome:</dt>
+                    <dd class="col-sm-8 fw-bold fs-5">@Model.Nome</dd>
+
+                    <dt class="col-sm-4 text-muted">Telefone:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-light text-dark border">
+                            <i class="bi bi-telephone me-1 text-muted"></i>@Model.Telefone
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-4 text-muted">Cadastrado em:</dt>
+                    <dd class="col-sm-8">@Model.DataCadastro.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+                </dl>
+
+                <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt text-danger me-1"></i>Endereços (@Model.Enderecos.Count)</h5>
+                @if (!Model.Enderecos.Any())
+                {
+                    <p class="text-muted small">Nenhum endereço cadastrado para este cliente.</p>
+                }
+                else
+                {
+                    <ul class="list-group mb-4">
+                        @foreach (var end in Model.Enderecos)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@end.Logradouro, @end.Numero</strong>
+                                    @if (!string.IsNullOrEmpty(end.Complemento))
+                                    {
+                                        <span class="text-muted">(@end.Complemento)</span>
+                                    }
+                                    <div class="small text-muted">@end.Bairro</div>
+                                </div>
+                                @if (!string.IsNullOrEmpty(end.Rotulo))
+                                {
+                                    <span class="badge bg-secondary">@end.Rotulo</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+
+                <div class="d-flex justify-content-between">
+                    <a href="/clientes" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Voltar
+                    </a>
+                    <a href="/clientes/editar/@Model.Id" class="btn btn-warning">
+                        <i class="bi bi-pencil me-1"></i> Editar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

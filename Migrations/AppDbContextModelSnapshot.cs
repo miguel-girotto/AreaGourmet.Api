@@ -32,7 +32,8 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
 
@@ -52,7 +53,8 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -73,24 +75,29 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<string>("Bairro")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Complemento")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
 
                     b.Property<string>("Logradouro")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
 
                     b.Property<string>("Numero")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)");
 
                     b.Property<string>("Rotulo")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
 
@@ -111,10 +118,12 @@ namespace AreaGourmet.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("QuantidadeAtual")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<decimal>("QuantidadeMinima")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
                     b.HasKey("Id");
 
@@ -136,7 +145,8 @@ namespace AreaGourmet.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrecoUnitario")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
@@ -145,7 +155,8 @@ namespace AreaGourmet.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubtotalItem")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -175,7 +186,8 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<string>("FormaPagamento")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<int>("NumeroComanda")
                         .HasColumnType("int");
@@ -188,26 +200,34 @@ namespace AreaGourmet.Api.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Subtotal")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TaxaEntrega")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TipoAtendimento")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ValorTotal")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("DataHora");
+
                     b.HasIndex("EnderecoId");
+
+                    b.HasIndex("NumeroComanda");
 
                     b.HasIndex("UsuarioId");
 
@@ -233,10 +253,12 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<decimal>("PrecoAtual")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -258,21 +280,28 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Perfil")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });
@@ -310,7 +339,7 @@ namespace AreaGourmet.Api.Migrations
                     b.HasOne("AreaGourmet.Api.Models.Produto", "Produto")
                         .WithMany("ItensPedido")
                         .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Pedido");
@@ -321,17 +350,19 @@ namespace AreaGourmet.Api.Migrations
             modelBuilder.Entity("AreaGourmet.Api.Models.Pedido", b =>
                 {
                     b.HasOne("AreaGourmet.Api.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId");
+                        .WithMany("Pedidos")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("AreaGourmet.Api.Models.Endereco", "Endereco")
-                        .WithMany()
-                        .HasForeignKey("EnderecoId");
+                        .WithMany("Pedidos")
+                        .HasForeignKey("EnderecoId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("AreaGourmet.Api.Models.Usuario", "Usuario")
-                        .WithMany()
+                        .WithMany("Pedidos")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -346,7 +377,7 @@ namespace AreaGourmet.Api.Migrations
                     b.HasOne("AreaGourmet.Api.Models.Categoria", "Categoria")
                         .WithMany("Produtos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Categoria");
@@ -360,6 +391,13 @@ namespace AreaGourmet.Api.Migrations
             modelBuilder.Entity("AreaGourmet.Api.Models.Cliente", b =>
                 {
                     b.Navigation("Enderecos");
+
+                    b.Navigation("Pedidos");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.Endereco", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("AreaGourmet.Api.Models.Pedido", b =>
@@ -372,6 +410,11 @@ namespace AreaGourmet.Api.Migrations
                     b.Navigation("EstoqueBebida");
 
                     b.Navigation("ItensPedido");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.Usuario", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }

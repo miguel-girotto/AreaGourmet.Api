@@ -12,6 +12,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     ));
 
+// Controllers & Views MVC
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
 // OpenAPI
 builder.Services.AddOpenApi();
 
@@ -24,6 +31,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.MapDefaultControllerRoute();
+app.MapControllers();
 
 
 app.MapGet("/api/health/database", async (AppDbContext db) =>

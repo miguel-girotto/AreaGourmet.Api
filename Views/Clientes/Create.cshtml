@@ -1,0 +1,46 @@
+@model AreaGourmet.Api.Models.Cliente
+
+@{
+    ViewData["Title"] = "Novo Cliente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-custom p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success-subtle text-success p-2 rounded-circle me-2">
+                        <i class="bi bi-person-plus fs-5"></i>
+                    </span>
+                    <h4 class="card-title mb-0 fw-bold">Cadastrar Novo Cliente</h4>
+                </div>
+                <hr class="text-muted" />
+
+                <form action="/clientes/criar" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Nome" class="form-label fw-semibold">Nome Completo</label>
+                        <input asp-for="Nome" class="form-control" placeholder="Ex: João da Silva" autofocus />
+                        <span asp-validation-for="Nome" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Telefone" class="form-label fw-semibold">Telefone / WhatsApp</label>
+                        <input asp-for="Telefone" class="form-control" placeholder="Ex: (11) 98765-4321" />
+                        <span asp-validation-for="Telefone" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/clientes" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Voltar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-lg me-1"></i> Salvar Cliente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Início";
+}
+
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm border">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold text-dark">
+            <i class="bi bi-cup-hot-fill text-warning me-2"></i>Área Gourmet
+        </h1>
+        <p class="col-md-8 fs-5 text-muted">
+            Bem-vindo ao painel de gerenciamento do Área Gourmet. Gerencie seus clientes, pedidos, produtos e estoque de forma centralizada.
+        </p>
+        <a href="/clientes" class="btn btn-primary btn-lg px-4 me-2">
+            <i class="bi bi-people-fill me-1"></i> Acessar Clientes
+        </a>
+        <a href="/clientes/criar" class="btn btn-outline-success btn-lg px-4">
+            <i class="bi bi-person-plus-fill me-1"></i> Novo Cliente
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card card-custom h-100 p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-primary-subtle text-primary p-3 rounded-circle me-3">
+                        <i class="bi bi-people fs-4"></i>
+                    </span>
+                    <h5 class="card-title mb-0">Clientes</h5>
+                </div>
+                <p class="card-text text-muted">
+                    Visualize o cadastro de clientes, números de contato, endereços e histórico de pedidos.
+                </p>
+                <a href="/clientes" class="btn btn-sm btn-outline-primary">Ver Lista de Clientes &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-custom h-100 p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success-subtle text-success p-3 rounded-circle me-3">
+                        <i class="bi bi-box-seam fs-4"></i>
+                    </span>
+                    <h5 class="card-title mb-0">Produtos & Categorias</h5>
+                </div>
+                <p class="card-text text-muted">
+                    Endpoints da API REST disponíveis para gerenciamento do catálogo e estoque de bebidas.
+                </p>
+                <a href="/api/produtos" target="_blank" class="btn btn-sm btn-outline-success">Acessar API Produtos &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-custom h-100 p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-warning-subtle text-warning p-3 rounded-circle me-3">
+                        <i class="bi bi-receipt fs-4"></i>
+                    </span>
+                    <h5 class="card-title mb-0">Pedidos</h5>
+                </div>
+                <p class="card-text text-muted">
+                    Controle de comandas de mesa e pedidos de entrega via API.
+                </p>
+                <a href="/api/pedidos" target="_blank" class="btn btn-sm btn-outline-warning">Acessar API Pedidos &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>
