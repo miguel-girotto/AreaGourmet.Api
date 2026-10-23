@@ -12,7 +12,11 @@ if (string.IsNullOrWhiteSpace(connection)) throw new InvalidOperationException("
 builder.Services.AddDbContext<AppDbContext>(o => o.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 builder.Services.AddScoped<Operacoes>();
 builder.Services.AddScoped<SessaoEvents>();
-builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+builder.Services.AddControllersWithViews(o =>
+{
+    o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    o.ModelBinderProviders.Insert(0, new DecimalHtmlModelBinderProvider());
+});
 builder.Services.AddAntiforgery(o => o.HeaderName = "X-CSRF-TOKEN");
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
 {
