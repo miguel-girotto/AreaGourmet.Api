@@ -22,7 +22,12 @@ public class EstoqueController(AppDbContext db, Operacoes op) : BaseController
         if (baixo) query = query.Where(e => e.QuantidadeAtual <= e.QuantidadeMinima);
         return View(await query.OrderBy(e => e.Produto.Nome).ToListAsync());
     }
-    [HttpGet] public async Task<IActionResult> Movimento(int produtoId = 0) { await Preparar(); return View(new MovimentoForm { ProdutoId = produtoId }); }
+    [HttpGet] public async Task<IActionResult> Movimento(int produtoId = 0)
+    {
+        await Preparar();
+        var estoque = await db.EstoqueBebidas.AsNoTracking().SingleOrDefaultAsync(e => e.ProdutoId == produtoId);
+        return View(new MovimentoForm { ProdutoId = produtoId, QuantidadeMinima = estoque?.QuantidadeMinima ?? 0 });
+    }
     [HttpPost] public async Task<IActionResult> Movimento(MovimentoForm form) => await Salvar(async () => await op.Movimentar(form, UsuarioId), () => RedirectToAction(nameof(Index)), async () => { await Preparar(); return View(form); });
     public async Task<IActionResult> Historico(string? tipo, int? produtoId, DateTime? inicio, DateTime? fim)
     {
@@ -42,6 +47,7 @@ public class EstoqueController(AppDbContext db, Operacoes op) : BaseController
     }
     [HttpPost] public async Task<IActionResult> Consumos(ConsumoForm form) => await Salvar(async () => await op.Transacao(async () =>
     {
+        Operacoes.Exigir(decimal.Round(form.Quantidade, 3) == form.Quantidade, "Use até três casas decimais no consumo.");
         Operacoes.Exigir(await db.Produtos.AnyAsync(p => p.Id == form.ProdutoId), "Produto não encontrado.");
         var e = await db.EstoqueBebidas.FindAsync(form.EstoqueBebidaId);
         Operacoes.Exigir(e is not null && e.ProdutoId != form.ProdutoId, "Consumo direto já baixa uma unidade. Escolha outro insumo para a associação adicional.");

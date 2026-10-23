@@ -32,7 +32,7 @@ public class AccountController(AppDbContext db) : Controller
             }
             catch (FormatException) { /* Senhas legadas requerem redefinição administrativa. */ }
         }
-        if (!ok || u is null)
+        if (!ok || u is null || u.Perfil is not ("Administrador" or "Caixa"))
         {
             ModelState.AddModelError("", "Login ou senha inválidos.");
             return View(form);

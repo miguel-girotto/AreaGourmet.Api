@@ -6,3 +6,11 @@ obj/
 *.suo
 .env
 appsettings.Development.json
+.test-tools/
+TestResults/
+artifacts/
+*.log
+*.sql
+*.zip
+__pycache__/
+*.pyc

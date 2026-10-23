@@ -139,6 +139,7 @@ public class Operacoes(AppDbContext db)
     {
         Exigir(form.Quantidade > 0 && form.Quantidade <= 999999.999m, "Quantidade inválida.");
         Exigir(form.Tipo is "ENTRADA" or "SAIDA", "Movimento inválido.");
+        Exigir(decimal.Round(form.Quantidade, 3) == form.Quantidade && decimal.Round(form.QuantidadeMinima, 3) == form.QuantidadeMinima, "Use até três casas decimais nas quantidades.");
         Exigir(await db.Produtos.AnyAsync(p => p.Id == form.ProdutoId), "Produto não encontrado.");
         var estoque = await db.EstoqueBebidas.SingleOrDefaultAsync(e => e.ProdutoId == form.ProdutoId);
         if (estoque is null)

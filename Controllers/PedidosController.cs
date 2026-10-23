@@ -23,6 +23,7 @@ public class PedidosController(AppDbContext db, Operacoes op) : BaseController
     }
     [HttpPost] public async Task<IActionResult> Status(int id, string status)
     {
+        if (status == "CANCELADO" && !Admin) return Forbid();
         try { await op.AlterarStatus(id, status, UsuarioId, Admin); TempData["Sucesso"] = "Status atualizado."; }
         catch (RegraException ex) { TempData["Erro"] = ex.Message; }
         return RedirectToAction(nameof(Detalhes), new { id });

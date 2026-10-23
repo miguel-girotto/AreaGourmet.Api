@@ -13,6 +13,12 @@ public class RelatoriosController(AppDbContext db) : Controller
         ViewBag.Inicio = inicio; ViewBag.Fim = fim; ViewBag.ProdutoId = produtoId; ViewBag.CategoriaId = categoriaId; ViewBag.Modalidade = modalidade; ViewBag.Pagamento = pagamento;
         ViewBag.Produtos = await db.Produtos.OrderBy(p => p.Nome).ToListAsync();
         ViewBag.Categorias = await db.Categorias.OrderBy(c => c.Nome).ToListAsync();
+        if (!ModelState.IsValid || inicio.Value.Date > fim.Value.Date || fim.Value.Year >= 9999)
+        {
+            ModelState.AddModelError("", "Informe um período válido, com início até o fim e ano menor que 9999.");
+            ViewBag.Pagamentos = new List<GrupoRelatorio>();
+            return View(new RelatorioVm());
+        }
         var end = fim.Value.Date.AddDays(1);
         var query = db.Pedidos.AsNoTracking().Where(p => p.Status == "FINALIZADO" && p.DataHora >= inicio.Value.Date && p.DataHora < end);
         if (!string.IsNullOrEmpty(modalidade)) query = query.Where(p => p.TipoAtendimento == modalidade);

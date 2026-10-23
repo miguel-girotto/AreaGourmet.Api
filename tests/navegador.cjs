@@ -1,0 +1,57 @@
+'use strict';
+// Requer Playwright e Chromium. Credenciais somente em arquivo local indicado por variável.
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const config = JSON.parse(fs.readFileSync(process.env.AREA_TEST_CONFIG, 'utf8'));
+const base = process.env.AREA_TEST_URL || 'http://127.0.0.1:5175';
+const output = process.env.AREA_BROWSER_OUTPUT || '/tmp/area-gourmet-browser';
+fs.mkdirSync(output, {recursive:true});
+(async () => {
+ const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless:true, args:['--no-sandbox']});
+ try {
+  const page = await browser.newPage({viewport:{width:1440,height:1000}});
+  const errors = [];
+  page.on('pageerror', e => errors.push(e.message));
+  await page.goto(base+'/Account/Login');
+  await page.getByLabel('Login', {exact:true}).fill(config.adminLogin);
+  await page.getByLabel('Senha', {exact:true}).fill(config.adminPassword);
+  await Promise.all([page.waitForURL('**/Vendas'), page.getByRole('button',{name:'Entrar no sistema'}).click()]);
+  await page.waitForSelector('.product-card');
+  await page.locator('.product-card').filter({has:page.getByRole('heading',{name:'Marmita Executiva',exact:true})}).getByRole('button',{name:'Adicionar'}).click();
+  await page.locator('.product-card').filter({has:page.getByRole('heading',{name:'Suco Natural Laranja',exact:true})}).getByRole('button',{name:'Adicionar'}).click();
+  await page.getByRole('button',{name:'Delivery',exact:true}).click();
+  await page.getByLabel('BUSCAR CLIENTE').fill('18999990000');
+  await page.locator('#customer-results').getByRole('button').first().click();
+  await page.getByLabel('ENDEREÇO DE ENTREGA').selectOption({index:1});
+  await page.getByLabel('Taxa de entrega').fill('5');
+  assert.match(await page.locator('#total').textContent(), /32,80/);
+  await page.screenshot({path:output+'/vendas-desktop.png',fullPage:true});
+  await page.getByRole('button',{name:'Aumentar Marmita Executiva'}).click();
+  assert.match(await page.locator('#total').textContent(), /51,70/);
+  await page.getByRole('button',{name:'Diminuir Marmita Executiva'}).click();
+  await page.getByRole('button',{name:'Bebidas',exact:true}).click();
+  assert.equal(await page.locator('.product-card:visible').count(),2);
+  await page.getByRole('button',{name:'Todos',exact:true}).click();
+  await page.getByLabel('Buscar produto',{exact:true}).fill('sem produto com esse nome');
+  await page.locator('#no-products').waitFor({state:'visible'});
+  await page.getByLabel('Buscar produto',{exact:true}).fill('');
+  await page.setViewportSize({width:390,height:844});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
+  await page.screenshot({path:output+'/vendas-mobile.png',fullPage:true});
+  await page.setViewportSize({width:1440,height:1000});
+  const responsePromise = page.waitForResponse(r=>r.url().endsWith('/api/pedidos') && r.request().method()==='POST');
+  await page.getByRole('button',{name:/Finalizar pedido/}).click();
+  const response = await responsePromise;
+  assert.equal(response.status(),200);
+  await page.waitForURL('**/Pedidos/Detalhes/*');
+  await page.getByRole('heading',{name:/Comanda #/}).waitFor();
+  assert.match(await page.locator('body').textContent(),/32,80/);
+  await page.goto(base+'/Relatorios');
+  await page.locator('#pivot').waitFor();
+  await page.screenshot({path:output+'/relatorios.png',fullPage:true});
+  assert.deepEqual(errors,[]);
+  fs.writeFileSync(output+'/resultado.json',JSON.stringify({passed:12,checks:['Login no navegador','Adicionar produtos','Delivery com cliente e endereço','Cálculo visual do total','Aumentar e diminuir quantidade','Filtro por categoria','Busca sem resultados','Responsividade sem overflow','Finalização via fetch e CSRF','Detalhes persistidos','Relatório e pivot renderizados','Sem exceções JavaScript']},null,2));
+  console.log('PASS: 12 verificações no Chromium; capturas em '+output);
+ } finally {await browser.close();}
+})().catch(e=>{console.error(e.message);process.exitCode=1;});

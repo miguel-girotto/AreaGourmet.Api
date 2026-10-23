@@ -1,6 +1,9 @@
-@AreaGourmet.Api_HostAddress = http://localhost:5173
+@AreaGourmet_HostAddress = http://localhost:5173
 
-GET {{AreaGourmet.Api_HostAddress}}/weatherforecast/
+# Requer cookie de sessão autenticada. Sem autenticação, retorna 401.
+GET {{AreaGourmet_HostAddress}}/api/health/database
 Accept: application/json
 
 ###
+# Interface MVC: GET /Account/Login
+# POSTs MVC/API usam token antiforgery e cookie da mesma sessão.

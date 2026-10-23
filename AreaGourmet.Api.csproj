@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>AreaGourmet-Local-Development</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
