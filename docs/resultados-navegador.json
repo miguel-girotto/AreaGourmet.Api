@@ -1,0 +1,17 @@
+{
+  "passed": 12,
+  "checks": [
+    "Login no navegador",
+    "Adicionar produtos",
+    "Delivery com cliente e endereço",
+    "Cálculo visual do total",
+    "Aumentar e diminuir quantidade",
+    "Filtro por categoria",
+    "Busca sem resultados",
+    "Responsividade sem overflow",
+    "Finalização via fetch e CSRF",
+    "Detalhes persistidos",
+    "Relatório e pivot renderizados",
+    "Sem exceções JavaScript"
+  ]
+}
