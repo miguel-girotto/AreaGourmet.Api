@@ -1,0 +1,6 @@
+@model List<Produto>
+@{ ViewData["Title"] = "Cardápio"; }
+<header class="page-header"><div><span class="eyebrow">SEMPRE FRESQUINHO</span><h1>Nosso cardápio</h1><p>Produtos disponíveis para o atendimento.</p></div><a class="btn primary" href="/Vendas">Montar pedido</a></header>
+<form method="get" class="filters panel"><label>Produto<input name="q" value="@ViewBag.Q" placeholder="Buscar pelo nome" /></label><label>Categoria<select name="categoriaId"><option value="">Todas</option>@foreach (Categoria c in ViewBag.Categorias) { <option value="@c.Id" selected="@(ViewBag.CategoriaId == c.Id)">@c.Nome</option> }</select></label><button class="btn primary">Filtrar</button><a href="/Vendas/Cardapio" class="btn secondary">Limpar</a></form>
+<div class="product-grid standalone">@foreach (var p in Model) { <article class="product-card"><div class="product-photo"><img src="@(p.Imagem ?? "/img/placeholder.svg")" alt="@p.Nome" loading="lazy" /></div><div class="product-info"><small>@p.Categoria.Nome</small><h2>@p.Nome</h2><div class="product-bottom"><strong>@p.PrecoAtual.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))</strong><span class="badge">@(p.EstoqueBebida is not null && p.EstoqueBebida.QuantidadeAtual < 1 ? "Sem estoque" : "Disponível")</span></div></div></article> }</div>
+@if (Model.Count == 0) { <p class="empty-state">Nenhum produto encontrado.</p> }

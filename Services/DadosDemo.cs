@@ -23,7 +23,7 @@ public class DadosDemo(AppDbContext db, Operacoes op)
             var p = await db.Produtos.SingleOrDefaultAsync(p => p.Nome == nome && p.CategoriaId == categorias[categoria].Id);
             if (p is null)
             {
-                p = new Produto { Nome = nome, CategoriaId = categorias[categoria].Id, PrecoAtual = preco, DisponivelVenda = venda, Imagem = $"/img/{imagem}.jpg" };
+                p = new Produto { Nome = nome, CategoriaId = categorias[categoria].Id, PrecoAtual = preco, DisponivelVenda = venda, Imagem = $"/img/{imagem}.svg" };
                 db.Produtos.Add(p); await db.SaveChangesAsync();
             }
             if (categoria is "Bebidas" or "Insumos" && !await db.EstoqueBebidas.AnyAsync(e => e.ProdutoId == p.Id))

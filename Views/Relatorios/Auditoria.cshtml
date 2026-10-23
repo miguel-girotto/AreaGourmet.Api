@@ -1,0 +1,3 @@
+@model List<Auditoria>
+@{ ViewData["Title"] = "Auditoria"; }
+<header class="page-header"><div><span class="eyebrow">SEGURANÇA E RASTREABILIDADE</span><h1>Auditoria de operações</h1><p>Últimos 500 eventos. Sem senhas ou strings de conexão.</p></div></header><section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Data (UTC)</th><th>Responsável</th><th>Operação</th></tr></thead><tbody>@foreach (var a in Model) { <tr><td>@a.DataHora.ToString("dd/MM/yyyy HH:mm:ss")</td><td>@(a.Usuario?.Nome ?? "Comando local")</td><td>@a.Acao</td></tr> }</tbody></table></div></section>

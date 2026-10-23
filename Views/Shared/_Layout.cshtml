@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · Area Gourmet</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
+</head>
+<body>
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <aside class="sidebar">
+        <a class="brand" href="/Vendas"><span class="brand-mark"><svg><use href="/img/icons.svg#chef" /></svg></span><span>Area Gourmet<small>SISTEMA DE GESTÃO</small></span></a>
+        <div class="nav-caption">ATENDIMENTO</div>
+        <nav aria-label="Navegação principal">
+            <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Vendas" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" href="/Vendas"><svg><use href="/img/icons.svg#bag" /></svg>Novo pedido</a>
+            <a href="/Pedidos"><svg><use href="/img/icons.svg#receipt" /></svg>Pedidos</a>
+            <a href="/Vendas/Cardapio"><svg><use href="/img/icons.svg#book" /></svg>Cardápio</a>
+            <a href="/Cadastros?tipo=Clientes"><svg><use href="/img/icons.svg#users" /></svg>Clientes</a>
+            @if (User.IsInRole("Administrador"))
+            {
+                <div class="nav-caption">ADMINISTRAÇÃO</div>
+                <a href="/Home"><svg><use href="/img/icons.svg#grid" /></svg>Painel</a>
+                <a href="/Cadastros?tipo=Produtos"><svg><use href="/img/icons.svg#box" /></svg>Produtos</a>
+                <a href="/Cadastros?tipo=Categorias"><svg><use href="/img/icons.svg#grid" /></svg>Categorias</a>
+                <a href="/Estoque"><svg><use href="/img/icons.svg#box" /></svg>Estoque</a>
+                <a href="/Estoque/Historico"><svg><use href="/img/icons.svg#swap" /></svg>Movimentações</a>
+                <a href="/Relatorios"><svg><use href="/img/icons.svg#chart" /></svg>Relatórios</a>
+                <a href="/Usuarios"><svg><use href="/img/icons.svg#users" /></svg>Usuários</a>
+                <a href="/Relatorios/Auditoria"><svg><use href="/img/icons.svg#shield" /></svg>Auditoria</a>
+            }
+        </nav>
+        <div class="operator"><span class="avatar">@(User.Identity.Name?.FirstOrDefault())</span><div><strong>@User.Identity.Name</strong><small>@User.FindFirstValue(ClaimTypes.Role)</small></div><form asp-controller="Account" asp-action="Logout" method="post"><button class="icon-button" title="Sair ou trocar de operador" aria-label="Sair"><svg><use href="/img/icons.svg#logout" /></svg></button></form></div>
+    </aside>
+}
+<main class="@(User.Identity?.IsAuthenticated == true ? "main" : "public-main")">
+    @if (TempData["Sucesso"] is string sucesso) { <div class="alert success" role="status">@sucesso</div> }
+    @if (TempData["Erro"] is string erro) { <div class="alert error" role="alert">@erro</div> }
+    @RenderBody()
+</main>
+@await RenderSectionAsync("Scripts", required: false)
+</body></html>
