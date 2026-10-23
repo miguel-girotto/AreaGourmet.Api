@@ -4,6 +4,8 @@ public class ItemPedido
 {
     public int Id { get; set; }
 
+    public string? NomeProdutoHistorico { get; set; }
+
     public int PedidoId { get; set; }
 
     public int ProdutoId { get; set; }

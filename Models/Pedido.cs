@@ -4,6 +4,10 @@ public class Pedido
 {
     public int Id { get; set; }
 
+    public string? ChaveOperacao { get; set; }
+    public string? ClienteHistorico { get; set; }
+    public string? EnderecoHistorico { get; set; }
+
     public int NumeroComanda { get; set; }
 
     public int UsuarioId { get; set; }

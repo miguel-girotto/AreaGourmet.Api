@@ -12,6 +12,8 @@ public class Produto
 
     public string? Imagem { get; set; }
 
+    public bool DisponivelVenda { get; set; } = true;
+
     public bool Ativo { get; set; } = true;
 
     public Categoria Categoria { get; set; } = null!;

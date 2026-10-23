@@ -12,5 +12,9 @@ public class Usuario
 
     public string Perfil { get; set; } = string.Empty;
 
+    public bool PodeCadastrarClientes { get; set; } = true;
+
+    public string VersaoSessao { get; set; } = Guid.NewGuid().ToString();
+
     public bool Ativo { get; set; } = true;
 }

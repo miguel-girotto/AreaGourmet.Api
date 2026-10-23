@@ -22,6 +22,32 @@ namespace AreaGourmet.Api.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("AreaGourmet.Api.Models.Auditoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("DataHora")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Auditorias");
+                });
+
             modelBuilder.Entity("AreaGourmet.Api.Models.Categoria", b =>
                 {
                     b.Property<int>("Id")
@@ -29,6 +55,9 @@ namespace AreaGourmet.Api.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -47,6 +76,9 @@ namespace AreaGourmet.Api.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime(6)");
 
@@ -61,6 +93,57 @@ namespace AreaGourmet.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.ConsumoEstoque", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EstoqueBebidaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstoqueBebidaId");
+
+                    b.HasIndex("ProdutoId", "EstoqueBebidaId")
+                        .IsUnique();
+
+                    b.ToTable("Consumos");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.ControleOperacao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("Versao")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ControleOperacoes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Versao = 0L
+                        });
                 });
 
             modelBuilder.Entity("AreaGourmet.Api.Models.Endereco", b =>
@@ -132,6 +215,9 @@ namespace AreaGourmet.Api.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("NomeProdutoHistorico")
+                        .HasColumnType("longtext");
+
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
 
@@ -156,6 +242,57 @@ namespace AreaGourmet.Api.Migrations
                     b.ToTable("ItensPedido");
                 });
 
+            modelBuilder.Entity("AreaGourmet.Api.Models.MovimentacaoEstoque", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataHora")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("EstoqueBebidaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observacao")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<int?>("PedidoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("SaldoApos")
+                        .HasPrecision(65, 30)
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DataHora");
+
+                    b.HasIndex("EstoqueBebidaId");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Movimentacoes");
+                });
+
             modelBuilder.Entity("AreaGourmet.Api.Models.Pedido", b =>
                 {
                     b.Property<int>("Id")
@@ -164,11 +301,21 @@ namespace AreaGourmet.Api.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ChaveOperacao")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("ClienteHistorico")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EnderecoHistorico")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("EnderecoId")
                         .HasColumnType("int");
@@ -205,7 +352,12 @@ namespace AreaGourmet.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChaveOperacao")
+                        .IsUnique();
+
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("DataHora");
 
                     b.HasIndex("EnderecoId");
 
@@ -227,6 +379,9 @@ namespace AreaGourmet.Api.Migrations
 
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("DisponivelVenda")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Imagem")
                         .HasColumnType("longtext");
@@ -268,13 +423,50 @@ namespace AreaGourmet.Api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("PodeCadastrarClientes")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("VersaoSessao")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.Auditoria", b =>
+                {
+                    b.HasOne("AreaGourmet.Api.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.ConsumoEstoque", b =>
+                {
+                    b.HasOne("AreaGourmet.Api.Models.EstoqueBebida", "EstoqueBebida")
+                        .WithMany()
+                        .HasForeignKey("EstoqueBebidaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AreaGourmet.Api.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EstoqueBebida");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("AreaGourmet.Api.Models.Endereco", b =>
@@ -282,7 +474,7 @@ namespace AreaGourmet.Api.Migrations
                     b.HasOne("AreaGourmet.Api.Models.Cliente", "Cliente")
                         .WithMany("Enderecos")
                         .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -293,7 +485,7 @@ namespace AreaGourmet.Api.Migrations
                     b.HasOne("AreaGourmet.Api.Models.Produto", "Produto")
                         .WithOne("EstoqueBebida")
                         .HasForeignKey("AreaGourmet.Api.Models.EstoqueBebida", "ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Produto");
@@ -304,13 +496,13 @@ namespace AreaGourmet.Api.Migrations
                     b.HasOne("AreaGourmet.Api.Models.Pedido", "Pedido")
                         .WithMany("Itens")
                         .HasForeignKey("PedidoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AreaGourmet.Api.Models.Produto", "Produto")
                         .WithMany("ItensPedido")
                         .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Pedido");
@@ -318,20 +510,48 @@ namespace AreaGourmet.Api.Migrations
                     b.Navigation("Produto");
                 });
 
-            modelBuilder.Entity("AreaGourmet.Api.Models.Pedido", b =>
+            modelBuilder.Entity("AreaGourmet.Api.Models.MovimentacaoEstoque", b =>
                 {
-                    b.HasOne("AreaGourmet.Api.Models.Cliente", "Cliente")
+                    b.HasOne("AreaGourmet.Api.Models.EstoqueBebida", "EstoqueBebida")
                         .WithMany()
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("EstoqueBebidaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("AreaGourmet.Api.Models.Endereco", "Endereco")
+                    b.HasOne("AreaGourmet.Api.Models.Pedido", "Pedido")
                         .WithMany()
-                        .HasForeignKey("EnderecoId");
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("AreaGourmet.Api.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EstoqueBebida");
+
+                    b.Navigation("Pedido");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("AreaGourmet.Api.Models.Pedido", b =>
+                {
+                    b.HasOne("AreaGourmet.Api.Models.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AreaGourmet.Api.Models.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AreaGourmet.Api.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -346,7 +566,7 @@ namespace AreaGourmet.Api.Migrations
                     b.HasOne("AreaGourmet.Api.Models.Categoria", "Categoria")
                         .WithMany("Produtos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Categoria");
