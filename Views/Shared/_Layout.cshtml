@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>@ViewData["Title"] · Área Gourmet</title>
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/></head>
+<body class="@(User.Identity?.IsAuthenticated==true?"app":"guest")">
+@if(User.Identity?.IsAuthenticated==true){
+<aside class="sidebar"><a class="brand" href="/"><span class="brand-icon">♧</span><span>Área Gourmet<small>SISTEMA POS</small></span></a>
+<nav><a href="/Vendas" class="@(ViewContext.RouteData.Values["controller"]?.ToString()=="Vendas"?"active":"")">▣ <span>Novo Pedido</span></a>
+<a href="/Produtos">▤ <span>Cardápio</span></a><a href="/Clientes">♧ <span>Clientes</span></a>
+@if(User.IsInRole("Administrador")){<a href="/Produtos/Estoque">▧ <span>Estoque</span></a><a href="/Relatorios">↗ <span>Relatórios</span></a><a href="/Usuarios">◎ <span>Usuários</span></a>}</nav>
+<div class="user"><span class="avatar">@User.Identity?.Name?[0]</span><div>@User.Identity?.Name<small>@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</small></div><form asp-controller="Conta" asp-action="Sair" method="post"><button class="logout" title="Sair">↪</button></form></div></aside>
+}
+<main class="main">@if(TempData["Mensagem"] is string msg){<div class="notice" role="status">@msg</div>}@RenderBody()</main>
+<script src="~/js/site.js" asp-append-version="true"></script>@await RenderSectionAsync("Scripts",required:false)
+</body></html>

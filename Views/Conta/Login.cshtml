@@ -1,0 +1,4 @@
+@model LoginForm
+@{ViewData["Title"]="Entrar";}
+<section class="login"><div class="brand-icon">♧</div><p class="eyebrow">ÁREA GOURMET · SISTEMA POS</p><h1>Bom trabalho começa aqui.</h1><p class="muted">Entre para gerenciar os pedidos do dia.</p>
+<form method="post" asp-action="Login"><div asp-validation-summary="All" class="validation"></div><label>E-mail<input asp-for="Email" autocomplete="username" required/></label><label>Senha<input asp-for="Senha" autocomplete="current-password" required/></label><button class="primary">Entrar no sistema →</button></form></section>
