@@ -1,6 +1,6 @@
 # Área Gourmet — Sistema POS
 
-Aplicação acadêmica ASP.NET Core MVC (.NET 8), Entity Framework Core e MySQL 8. Interface em português inspirada na referência enviada, com sidebar verde, catálogo e comanda lateral. Inclui ilustrações SVG originais locais; não reproduz as fotografias da referência.
+Aplicação acadêmica ASP.NET Core MVC (.NET 8), Entity Framework Core e MySQL 8. Interface em português inspirada na referência enviada, com sidebar verde, catálogo e comanda lateral. Inclui fotografias ilustrativas locais e identidade visual com referência à logo do restaurante. Créditos e licenças em `docs/FOTOGRAFIAS.md`.
 
 ## Requisitos
 
@@ -42,7 +42,7 @@ Abra http://localhost:5080 e entre com o e-mail e senha configurados. A senha in
 
 O aplicativo aplica as migrations MySQL na inicialização. `database/schema.sql` contém o SQL gerado pelo EF para consulta ou instalação manual. Não aplique o SQL manualmente e as migrations sobre o mesmo banco sem controlar a tabela de histórico.
 
-`Seed__DemoData=true` cria sete produtos, uma cliente com endereço e doze vendas distribuídas em quatro meses. O seed só popula demonstração quando não há produtos e desconta as unidades das vendas geradas. Para uma base real, deixe `Seed__DemoData=false`.
+`Seed__DemoData=true` cria 16 produtos, uma cliente com endereço e doze vendas distribuídas em quatro meses. O seed só popula demonstração quando não há produtos e desconta as unidades das vendas geradas. Para uma base real, deixe `Seed__DemoData=false`.
 
 ## Demonstração rápida sem MySQL
 
@@ -84,7 +84,7 @@ No PowerShell, use a sintaxe `$env:NOME='valor'`. SQLite usa `EnsureCreated`; mi
 - `ViewModels/`: contratos de entrada, formulários e relatório.
 - `Controllers/`: autenticação, autorização, consultas e orquestração.
 - `Views/`: Razor MVC.
-- `wwwroot/`: CSS responsivo, JavaScript e imagens locais.
+- `wwwroot/`: CSS responsivo, JavaScript e fotografias locais.
 - `Migrations/`: migração inicial MySQL e snapshot.
 - `database/`: script SQL gerado.
 - `tests/`: teste de integração HTTP + persistência SQLite.
@@ -135,3 +135,18 @@ Não envie `.env`, senhas, bancos locais ou dados reais. Todos os membros devem 
 Este é um projeto acadêmico funcional, sem certificação de prontidão para produção. Configure HTTPS, segredos externos, backups, logs e monitoramento; use usuário MySQL com permissões adequadas. Aplique migrations como etapa controlada de implantação em ambientes com múltiplas réplicas. Adicione limitação de tentativas de login, recuperação de senha, auditoria de ajustes de estoque e testes de carga antes de uso real. Em produção a aplicação redireciona para HTTPS; o modo Development dos exemplos destina-se à execução local.
 
 Fontes externas opcionais: Google Fonts para DM Sans, com fallback do sistema quando offline. Nenhuma biblioteca JavaScript externa é necessária.
+
+## Atualização visual e cardápio demonstrativo
+
+A interface usa vermelho e amarelo da logo pública do Área Gourmet, fundo claro e navegação escura. Os dados de contato e o endereço ficam na seção `Restaurante` do `appsettings.json`. Não foram informados horários de abertura e fechamento: a interface diz apenas "De domingo a domingo".
+
+- Fotos são ilustrativas, não representam os pratos oficiais do estabelecimento. Consulte os créditos e as licenças individuais em `wwwroot/images/CREDITOS.txt`.
+- A tela `/Restaurante` reúne logo, endereço e links de Instagram, WhatsApp e mapa. Links abrem os serviços; nenhuma mensagem é enviada automaticamente.
+- A busca do painel funciona junto com as categorias e ignora diferenças de acento e caixa.
+- Bancos existentes continuam funcionando, sem mudança de esquema ou necessidade de excluir o banco. Valores antigos de Imagem, como `meal.svg`, são resolvidos para as fotografias na interface.
+- Para adicionar os nove exemplos novos ao banco que já tinha sete produtos, entre como Administrador, abra **Cardápio** e clique em **Adicionar exemplos**. A rotina considera o nome, inclui apenas os exemplos ausentes, mantém produtos personalizados e não altera preço, estoque ou pedidos existentes. Produtos inativos não são reativados. Repetir a ação não duplica os mesmos exemplos.
+- Novas bases com `Seed__DemoData=true` já recebem os 16 exemplos.
+- `Restaurante:CardapioDemonstrativo` é `true` por padrão e sinaliza os preços de exemplo. Só altere para `false` depois de cadastrar um cardápio real validado; as fotos continuam ilustrativas.
+- Para mudar uma foto, edite o produto e escolha uma opção da lista. Os arquivos estão em `wwwroot/images/photos`. A entrada continua limitada a uma lista conhecida de arquivos locais.
+
+Os produtos e preços são exemplos acadêmicos; o telefone e endereço de contato não implicam que o restaurante comercialize essas opções ou por esses valores.

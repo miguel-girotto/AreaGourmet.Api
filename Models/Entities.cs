@@ -38,7 +38,7 @@ public class Produto {
     public bool ControlaEstoque { get; set; } = true;
     public bool Ativo { get; set; } = true;
     [Range(1, int.MaxValue)] public int Versao { get; set; } = 1;
-    [StringLength(100)] public string Imagem { get; set; } = "meal.svg";
+    [StringLength(100)] public string Imagem { get; set; } = "meal.jpg";
 }
 public class Pedido {
     public int Id { get; set; }

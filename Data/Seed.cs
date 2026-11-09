@@ -12,14 +12,7 @@ public static class Seed {
             admin.SenhaHash=hasher.HashPassword(admin,senha);db.Usuarios.Add(admin);await db.SaveChangesAsync();
         }
         if(!config.GetValue<bool>("Seed:DemoData")||await db.Produtos.AnyAsync())return;
-        var produtos=new[]{
-            new Produto{Nome="Marmita Executiva",Categoria="Marmitas",PrecoUnitario=18.90m,EstoqueInsumo=100,Imagem="meal.svg"},
-            new Produto{Nome="Marmita Fitness",Categoria="Marmitas",PrecoUnitario=17.90m,EstoqueInsumo=100,Imagem="fitness.svg"},
-            new Produto{Nome="Frango Grelhado",Categoria="Marmitas",PrecoUnitario=16.50m,EstoqueInsumo=100,Imagem="chicken.svg"},
-            new Produto{Nome="Feijoada Completa",Categoria="Marmitas",PrecoUnitario=22.90m,EstoqueInsumo=100,Imagem="beans.svg"},
-            new Produto{Nome="Suco Natural Laranja",Categoria="Bebidas",PrecoUnitario=8.90m,EstoqueInsumo=100,Imagem="juice.svg"},
-            new Produto{Nome="Refrigerante Guaraná",Categoria="Bebidas",PrecoUnitario=6.50m,EstoqueInsumo=100,Imagem="soda.svg"},
-            new Produto{Nome="Farofa Crocante",Categoria="Adicionais",PrecoUnitario=3.50m,EstoqueInsumo=100,Imagem="extra.svg"}};
+        var produtos=DemoCatalog.CriarProdutos();
         var cliente=new Cliente{Nome="Maria Silva",Telefone="11987654321",Enderecos=[new Endereco{Logradouro="Rua das Flores",Numero="123",Bairro="Centro",Cidade="Assis",CEP="19800000"}]};
         db.Produtos.AddRange(produtos);db.Clientes.Add(cliente);await db.SaveChangesAsync();
         var adminId=await db.Usuarios.Where(x=>x.Perfil=="Administrador").Select(x=>x.Id).FirstAsync();

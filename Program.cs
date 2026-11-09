@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<RestauranteInfo>(builder.Configuration.GetSection("Restaurante"));
 builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 builder.Services.AddDbContext<AppDbContext>(o => {
     if (builder.Configuration["Database:Provider"] == "Sqlite")

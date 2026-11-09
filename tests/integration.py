@@ -98,6 +98,7 @@ def run():
                 cashier=Client(admin.base);cashier.login('caixa@test.local','CaixaTeste123!')
                 assert cashier.request('/Vendas')[0]==200
                 for path in ['/Usuarios','/Relatorios','/Produtos/Estoque','/Produtos/Editar/1']:assert cashier.request(path)[0]==403,path
+                assert cashier.request('/Produtos/ImportarDemonstracao',{'__RequestVerificationToken':cashier.token()})[0]==403
                 assert cashier.request('/Produtos/Excluir/1',{'__RequestVerificationToken':cashier.token()})[0]==403
                 assert cashier.request(f'/Vendas/Recibo/{order}')[0]==403
                 print('PASS: user creation and role enforcement for GET/POST and receipt ownership')
@@ -110,6 +111,28 @@ def run():
                 admin.form(f'/Usuarios/Excluir/{cashier_id}',{},'/Usuarios')
                 assert '/Conta/Login' in cashier.request('/Vendas')[2]
                 print('PASS: report, soft deletion and active-session revocation')
+                # Simulate an old database: first seven legacy products plus a custom product.
+                assert scalar('SELECT COUNT(*) FROM Produtos')==16
+                with sqlite3.connect(dbfile) as fixture:
+                    fixture.execute('DELETE FROM Produtos WHERE Id>7')
+                    fixture.execute("UPDATE Produtos SET Imagem='meal.svg' WHERE Id=1")
+                    fixture.execute("INSERT INTO Produtos(Nome,Categoria,PrecoUnitario,EstoqueInsumo,ControlaEstoque,Ativo,Versao,Imagem) VALUES('Produto personalizado','Adicionais',12.34,17,1,1,1,'extra.jpg')")
+                    before=fixture.execute('SELECT Id,Nome,PrecoUnitario,EstoqueInsumo,Versao,Imagem FROM Produtos ORDER BY Id').fetchall()
+                    orders_before=fixture.execute('SELECT COUNT(*) FROM Pedidos').fetchone()[0]
+                assert admin.form('/Produtos/ImportarDemonstracao',{},'/Produtos')[0]==200
+                assert scalar('SELECT COUNT(*) FROM Produtos')==17
+                with sqlite3.connect(dbfile) as fixture:
+                    after=fixture.execute('SELECT Id,Nome,PrecoUnitario,EstoqueInsumo,Versao,Imagem FROM Produtos ORDER BY Id').fetchall()
+                    after=[row for row in after if row[0] in {x[0] for x in before}]
+                    assert before==after
+                assert scalar('SELECT COUNT(*) FROM Pedidos')==orders_before
+                assert admin.form('/Produtos/ImportarDemonstracao',{},'/Produtos')[0]==200
+                assert scalar('SELECT COUNT(*) FROM Produtos')==17
+                pos=admin.request('/Vendas')
+                assert pos[0]==200 and '/images/photos/meal.jpg' in pos[1]
+                assert admin.request('/Restaurante')[0]==200
+                assert admin.request('/images/CREDITOS.txt')[0]==200
+                print('PASS: old database import preserves prices, stock, custom products and orders; repeated import adds no duplicates; legacy SVG names resolve to photos')
                 print('ALL INTEGRATION CHECKS PASSED')
             finally:
                 process.terminate()

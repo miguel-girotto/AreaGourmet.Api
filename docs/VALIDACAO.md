@@ -28,3 +28,14 @@
 ## Limites da validação
 
 Não foi executado um servidor MySQL neste ambiente. A migration e o SQL foram gerados para MySQL, mas a persistência funcional foi exercitada com SQLite. Antes da apresentação, execute com MySQL seguindo o README e repita o roteiro de docs/REQUISITOS.md. Concorrência sob carga, múltiplas instâncias e implantação HTTPS não foram testadas.
+
+## Atualização visual e catálogo — verificações adicionais
+
+- Compilação e repetição do teste de integração existente com o catálogo de 16 produtos.
+- Simulação de banco antigo com sete produtos e um produto personalizado: importação dos exemplos ausentes preservou preços, versões, estoque, imagens originais e número de pedidos. Repetição não criou duplicatas.
+- Usuário Caixa recebeu 403 ao tentar importar exemplos por POST.
+- Valores antigos de imagem `.svg` passaram a exibir fotografias sem modificar a linha no banco.
+- Navegação Chromium em 1440 × 1000 e 390 × 844: busca por "AGUA" encontrou "Água Mineral"; filtro Bebidas mostrou cinco opções; busca vazia exibiu mensagem; fotografias carregaram sem erro.
+- Venda por delivery manteve o total de R$ 55,20 e abriu o recibo.
+- Tela do restaurante, endereço, links de contato e arquivo de créditos acessíveis. Sem erros JavaScript ou rolagem horizontal nas telas móveis verificadas.
+- Persistência desta atualização testada em SQLite. MySQL continua dependendo de validação em um servidor real. A atualização não muda o esquema do banco.

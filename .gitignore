@@ -7,3 +7,10 @@ obj/
 .vs/
 *.user
 artifacts/
+
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal

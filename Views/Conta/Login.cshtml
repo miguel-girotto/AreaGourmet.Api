@@ -1,4 +1,28 @@
 @model LoginForm
-@{ViewData["Title"]="Entrar";}
-<section class="login"><div class="brand-icon">♧</div><p class="eyebrow">ÁREA GOURMET · SISTEMA POS</p><h1>Bom trabalho começa aqui.</h1><p class="muted">Entre para gerenciar os pedidos do dia.</p>
-<form method="post" asp-action="Login"><div asp-validation-summary="All" class="validation"></div><label>E-mail<input asp-for="Email" autocomplete="username" required/></label><label>Senha<input asp-for="Senha" autocomplete="current-password" required/></label><button class="primary">Entrar no sistema →</button></form></section>
+@{
+    ViewData["Title"] = "Entrar"; var info = Restaurante.Value;
+}
+<div class="login-scene">
+    <section class="login-presentation"><img src="/images/area-gourmet-logo.png" alt="Logo Área Gourmet"
+                                                 class="login-logo" />
+        <p class="eyebrow">RESTAURANTE · ASSIS / SP</p>
+        <h1>O sabor de casa.<br />O cuidado de sempre.</h1>
+        <p>Mais organização para servir bem, todos os dias.</p>
+        <div class="login-photo"><img src="@ProductImages.Url("chicken.jpg")"
+                                          alt="Foto ilustrativa de frango grelhado" /></div>
+            <div class="login-contact"><span>@info.Atendimento</span><a href="@info.WhatsApp" target="_blank"
+                                                                            rel="noopener noreferrer">@info.Telefone →</a><span>@info.Endereco</span><a href="@info.Instagram"
+                                                                                            target="_blank" rel="noopener noreferrer">@info.InstagramNome →</a></div>
+            </section>
+            <section class="login">
+                <p class="eyebrow">ÁREA DA EQUIPE</p>
+                <h2>Vamos começar?</h2>
+                <p class="muted">Entre para cuidar dos pedidos do dia.</p>
+                <form method="post" asp-action="Login">
+                    <div asp-validation-summary="All" class="validation"></div><label>E-mail<input asp-for="Email"
+                                                                                                   autocomplete="username" required /></label><label>Senha<input asp-for="Senha"
+                                                                                  autocomplete="current-password" required /></label><button class="primary">Entrar no sistema
+                    →</button>
+                </form><small class="login-note">Acesso exclusivo à equipe do restaurante.</small>
+            </section>
+        </div>
