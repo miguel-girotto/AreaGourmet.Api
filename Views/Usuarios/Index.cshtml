@@ -1,3 +1,43 @@
 @model List<Usuario>
-@{ViewData["Title"]="Usuários";}
-<section class="page"><header class="page-header"><div><p class="eyebrow">EQUIPE</p><h1>Usuários</h1></div><a href="/Usuarios/Editar" class="button primary">+ Novo usuário</a></header><form method="get" class="filters"><input name="busca" value="@ViewBag.Busca" placeholder="Nome ou e-mail" aria-label="Buscar usuário"/><button>Filtrar</button><a href="/Usuarios">Limpar</a></form><div class="table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead><tbody>@foreach(var u in Model){<tr><td>@u.Nome</td><td>@u.Email</td><td>@u.Perfil</td><td>@(u.Ativo?"Ativo":"Inativo")</td><td><a href="/Usuarios/Editar/@u.Id">Editar</a>@if(u.Ativo){<form asp-action="Excluir" asp-route-id="@u.Id" method="post" class="inline confirm"><button class="danger">Inativar</button></form>}</td></tr>}</tbody></table></div><p class="muted">@Model.Count registro(s). Exibição limitada a 200.</p></section>
+@{
+    ViewData["Title"] = "Usuários";
+}
+<section class="page">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">EQUIPE</p>
+            <h1>Usuários</h1>
+        </div><a href="/Usuarios/Editar" class="button primary">+ Novo usuário</a>
+    </header>
+    <form method="get" class="filters"><input name="busca" value="@ViewBag.Busca" placeholder="Nome ou e-mail"
+                                                  aria-label="Buscar usuário" /><button>Filtrar</button><a href="/Usuarios">Limpar</a></form>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Perfil</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>@foreach(var u in Model){
+                    <tr>
+                        <td>@u.Nome</td>
+                        <td>@u.Email</td>
+                        <td>@u.Perfil</td>
+                        <td>@(u.Ativo ? "Ativo" : "Inativo")</td>
+                        <td><a href="/Usuarios/Editar/@u.Id">Editar</a>@if(u.Ativo){
+                            <form asp-action="Excluir"
+                                  asp-route-id="@u.Id" method="post" class="inline confirm"><button
+                                class="danger">Inativar</button></form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="muted">@Model.Count registro(s). Exibição limitada a 200.</p>
+</section>

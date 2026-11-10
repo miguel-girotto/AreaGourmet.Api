@@ -1,7 +1,105 @@
 @model RelatorioVM
-@{ViewData["Title"]="Relatórios";}
-<section class="page"><p class="eyebrow">VISÃO DO NEGÓCIO</p><h1>Relatórios de vendas</h1><p class="muted">Horário de Brasília · valores históricos preservados.</p><form method="get" class="filters"><label>De<input name="inicio" type="date" value="@Model.Inicio.ToString("yyyy-MM-dd")" required/></label><label>Até<input name="fim" type="date" value="@Model.Fim.ToString("yyyy-MM-dd")" required/></label><button>Filtrar período</button></form><div asp-validation-summary="All" class="validation"></div>
-<div class="stats"><div><small>RECEITA TOTAL</small><strong>@Model.Vendas.Sum(x=>x.Total).ToString("C")</strong></div><div><small>PEDIDOS</small><strong>@Model.Vendas.Count</strong></div><div><small>TICKET MÉDIO</small><strong>@((Model.Vendas.Count==0?0:Model.Vendas.Average(x=>x.Total)).ToString("C"))</strong></div></div>
-<h2>Por meio de pagamento</h2><div class="stats">@foreach(var g in Model.Pagamentos){<div><small>@g.Nome</small><strong>@g.Total.ToString("C")</strong></div>}</div>
-<h2>Vendas por categoria e mês</h2><p class="muted">Pivot do valor dos produtos; taxas de entrega não entram nesta tabela.</p><div class="table-wrap"><table><thead><tr><th>Categoria</th>@foreach(var m in Model.Meses){<th>@m</th>}<th>Total</th></tr></thead><tbody>@foreach(var row in Model.Pivot){<tr><td>@row.Key</td>@foreach(var m in Model.Meses){<td>@row.Value.GetValueOrDefault(m).ToString("C")</td>}<td>@row.Value.Values.Sum().ToString("C")</td></tr>}</tbody><tfoot><tr><th>Total</th>@foreach(var m in Model.Meses){<th>@Model.Pivot.Values.Sum(v=>v.GetValueOrDefault(m)).ToString("C")</th>}<th>@Model.Pivot.Values.Sum(v=>v.Values.Sum()).ToString("C")</th></tr></tfoot></table></div>
-<h2>Pedidos e totalização</h2><div class="table-wrap"><table><thead><tr><th>Comanda</th><th>Data / hora</th><th>Cliente</th><th>Operador</th><th>Canal</th><th>Pagamento</th><th>Qtd.</th><th>Produtos</th><th>Entrega</th><th>Total</th></tr></thead><tbody>@foreach(var v in Model.Vendas){<tr><td><a href="/Vendas/Recibo/@v.Id">#@v.Id.ToString("D4")</a></td><td>@v.DataHora.ToString("dd/MM/yyyy HH:mm")</td><td>@v.Cliente</td><td>@v.Operador</td><td>@v.Tipo</td><td>@v.Pagamento</td><td>@v.Quantidade</td><td>@v.Produtos.ToString("C")</td><td>@v.Entrega.ToString("C")</td><td>@v.Total.ToString("C")</td></tr>}</tbody><tfoot><tr><th colspan="6">Total</th><th>@Model.Vendas.Sum(x=>x.Quantidade)</th><th>@Model.Vendas.Sum(x=>x.Produtos).ToString("C")</th><th>@Model.Vendas.Sum(x=>x.Entrega).ToString("C")</th><th>@Model.Vendas.Sum(x=>x.Total).ToString("C")</th></tr></tfoot></table></div>@if(Model.Vendas.Count==0){<p>Nenhuma venda no período selecionado.</p>}</section>
+@{
+    ViewData["Title"] = "Relatórios";
+}
+<section class="page">
+    <p class="eyebrow">VISÃO DO NEGÓCIO</p>
+    <h1>Relatórios de vendas</h1>
+    <p class="muted">Horário de Brasília · valores históricos preservados.</p>
+    <form method="get" class="filters"><label>De<input name="inicio" type="date"
+                                                           value="@Model.Inicio.ToString("yyyy-MM-dd")" required /></label><label>Até<input name="fim" type="date"
+                                                                                         value="@Model.Fim.ToString("yyyy-MM-dd")" required /></label><button>Filtrar período</button></form>
+        <div asp-validation-summary="All" class="validation"></div>
+        <div class="stats">
+            <div><small>RECEITA TOTAL</small><strong>@Model.Vendas.Sum(x => x.Total).ToString("C")</strong></div>
+            <div><small>PEDIDOS</small><strong>@Model.Vendas.Count</strong></div>
+            <div><small>TICKET
+                MÉDIO</small><strong>@((Model.Vendas.Count == 0 ? 0 : Model.Vendas.Average(x => x.Total)).ToString("C"))</strong>
+            </div>
+        </div>
+        <h2>Por meio de pagamento</h2>
+        <div class="stats">@foreach(var g in Model.Pagamentos){
+            <div>
+                <small>@g.Nome</small><strong>@g.Total.ToString("C")</strong></div>
+            }
+        </div>
+        <h2>Vendas por categoria e mês</h2>
+        <p class="muted">Pivot do valor dos produtos; taxas de entrega não entram nesta tabela.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoria</th>@foreach(var m in Model.Meses){
+                        <th>@m</th>
+                    }
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>@foreach(var row in Model.Pivot){
+                <tr>
+                    <td>@row.Key</td>@foreach(var m in Model.Meses){
+                    <td>@row.Value.GetValueOrDefault(m).ToString("C")
+                    </td>
+                }
+                <td>@row.Value.Values.Sum().ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Total</th>@foreach(var m in Model.Meses){
+            <th>
+                @Model.Pivot.Values.Sum(v => v.GetValueOrDefault(m)).ToString("C")</th>
+            }
+            <th>
+                @Model.Pivot.Values.Sum(v => v.Values.Sum()).ToString("C")</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<h2>Pedidos e totalização</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Comanda</th>
+                <th>Data / hora</th>
+                <th>Cliente</th>
+                <th>Operador</th>
+                <th>Canal</th>
+                <th>Pagamento</th>
+                <th>Qtd.</th>
+                <th>Produtos</th>
+                <th>Entrega</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>@foreach(var v in Model.Vendas){
+            <tr>
+                <td><a href="/Vendas/Recibo/@v.Id">#@v.Id.ToString("D4")</a></td>
+                <td>@v.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@v.Cliente</td>
+                <td>@v.Operador</td>
+                <td>@v.Tipo</td>
+                <td>@v.Pagamento</td>
+                <td>@v.Quantidade</td>
+                <td>@v.Produtos.ToString("C")</td>
+                <td>@v.Entrega.ToString("C")</td>
+                <td>@v.Total.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="6">Total</th>
+            <th>@Model.Vendas.Sum(x => x.Quantidade)</th>
+            <th>@Model.Vendas.Sum(x => x.Produtos).ToString("C")</th>
+            <th>@Model.Vendas.Sum(x => x.Entrega).ToString("C")</th>
+            <th>@Model.Vendas.Sum(x => x.Total).ToString("C")</th>
+        </tr>
+    </tfoot>
+</table>
+</div>@if(Model.Vendas.Count==0){
+<p>Nenhuma venda no período selecionado.</p>
+    }
+</section>

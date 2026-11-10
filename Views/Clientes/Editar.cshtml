@@ -1,4 +1,28 @@
 @model Cliente
-@{ViewData["Title"]=Model.Id==0?"Novo cliente":"Editar cliente";}
-<section class="page"><h1>@ViewData["Title"]</h1><form asp-action="Editar" asp-route-id="@Model.Id" method="post" class="form-card"><input asp-for="Id" type="hidden"/><div asp-validation-summary="All" class="validation"></div><label>Nome<input asp-for="Nome" required maxlength="100"/></label><label>Telefone com DDD<input asp-for="Telefone" inputmode="numeric" placeholder="11987654321" pattern="[0-9]{10,11}" required/></label>@if(User.IsInRole("Administrador")){<label class="check"><input asp-for="Ativo"/>Cliente ativo</label>}<div class="actions"><button class="primary">Salvar cliente</button><a href="/Clientes">Voltar</a></div></form>
-@if(Model.Id!=0){<div class="section-heading"><h2>Endereços</h2><a class="button" href="/Clientes/Endereco?clienteId=@Model.Id">+ Novo endereço</a></div>@foreach(var e in Model.Enderecos){<div class="address-row"><span>@e.Resumo <small>@(e.Ativo?"":"Inativo") · CEP @e.CEP</small></span><a href="/Clientes/Endereco?clienteId=@Model.Id&id=@e.Id">Editar</a></div>}}</section>
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Novo cliente" : "Editar cliente";
+}
+<section class="page">
+    <h1>@ViewData["Title"]</h1>
+    <form asp-action="Editar" asp-route-id="@Model.Id" method="post" class="form-card"><input asp-for="Id"
+                                                                                                  type="hidden" />
+        <div asp-validation-summary="All" class="validation"></div><label>Nome<input asp-for="Nome" required
+                                                                                     maxlength="100" /></label><label>Telefone com DDD<input asp-for="Telefone" inputmode="numeric"
+                                                                placeholder="11987654321" pattern="[0-9]{10,11}"
+                                                                required /></label>@if(User.IsInRole("Administrador")){
+        <label class="check"><input
+            asp-for="Ativo" />Cliente ativo</label>
+        }
+        <div class="actions"><button class="primary">Salvar
+            cliente</button><a href="/Clientes">Voltar</a></div>
+        </form>
+        @if (Model.Id != 0)
+        {
+            <div class="section-heading">
+                <h2>Endereços</h2><a class="button" href="/Clientes/Endereco?clienteId=@Model.Id">+ Novo endereço</a>
+            </div>@foreach(var e in Model.Enderecos){
+            <div class="address-row"><span>@e.Resumo <small>@(e.Ativo?"":"Inativo") ·
+                CEP @e.CEP</small></span><a href="/Clientes/Endereco?clienteId=@Model.Id&id=@e.Id">Editar</a></div>
+            }
+        }
+    </section>

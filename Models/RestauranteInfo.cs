@@ -1,5 +1,7 @@
 namespace AreaGourmet.Models;
-public class RestauranteInfo {
+
+public class RestauranteInfo
+{
     public string Nome { get; set; } = "Área Gourmet";
     public string Cidade { get; set; } = "Assis · SP";
     public string Atendimento { get; set; } = "De domingo a domingo";

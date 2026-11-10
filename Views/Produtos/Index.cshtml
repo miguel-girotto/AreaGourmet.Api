@@ -37,16 +37,17 @@
             <td>@p.Nome</td>
             <td>@p.Categoria</td>
             <td>@p.PrecoUnitario.ToString("C")</td>
-            <td><span class="badge">@(p.Ativo ? "Ativo" : "Inativo")</span></td>@if(User.IsInRole("Administrador")){
-            <td><a href="/Produtos/Editar/@p.Id">Editar</a>@if(p.Ativo){
-                <form asp-action="Excluir"
-                      asp-route-id="@p.Id" method="post" class="inline confirm"><button
-                    class="danger">Inativar</button></form>
-                }
-            </td>
-        }
-    </tr>
-}
+            <td><span class="badge">@(p.Ativo ? "Ativo" : "Inativo")</span></td>
+            @if (User.IsInRole("Administrador"))
+            {
+                <td><a href="/Produtos/Editar/@p.Id">Editar</a>@if(p.Ativo){
+                    <form asp-action="Excluir" asp-route-id="@p.Id" method="post" class="inline confirm"><button
+                        class="danger">Inativar</button></form>
+                    }
+                </td>
+            }
+        </tr>
+    }
 </tbody>
 </table>
 </div>

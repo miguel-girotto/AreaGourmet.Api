@@ -1,3 +1,28 @@
 @model Produto
-@{ViewData["Title"]=Model.Id==0?"Novo produto":"Editar produto";}
-<section class="page"><h1>@ViewData["Title"]</h1><form method="post" asp-action="Editar" asp-route-id="@Model.Id" class="form-card"><div asp-validation-summary="All" class="validation"></div><input asp-for="Id" type="hidden"/><input asp-for="Versao" type="hidden"/><label>Nome<input asp-for="Nome" required maxlength="100"/></label><div class="form-grid"><label>Categoria<select asp-for="Categoria"><option>Marmitas</option><option>Bebidas</option><option>Adicionais</option></select></label><label>Preço unitário (R$)<input asp-for="PrecoUnitario" type="text" inputmode="decimal" placeholder="18,90" required/></label></div><div class="form-grid"><label>Estoque em unidades<input asp-for="EstoqueInsumo" min="0" max="1000000" required/></label><label>Fotografia ilustrativa<select asp-for="Imagem">@foreach(var foto in ProductImages.Opcoes){<option value="@foto.Key">@foto.Value</option>}</select></label></div><label class="check"><input asp-for="ControlaEstoque"/>Controlar estoque ao vender</label><label class="check"><input asp-for="Ativo"/>Produto ativo</label><p class="muted">O estoque representa unidades vendáveis. Para marmitas, pode representar porções disponíveis ou conjuntos de embalagem reservados ao produto.</p><div class="actions"><button class="primary">Salvar produto</button><a href="/Produtos">Voltar</a></div></form></section>
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Novo produto" : "Editar produto";
+}
+<section class="page">
+    <h1>@ViewData["Title"]</h1>
+    <form method="post" asp-action="Editar" asp-route-id="@Model.Id" class="form-card">
+        <div asp-validation-summary="All" class="validation"></div><input asp-for="Id" type="hidden" /><input
+        asp-for="Versao" type="hidden" /><label>Nome<input asp-for="Nome" required maxlength="100" /></label>
+        <div class="form-grid"><label>Categoria<select asp-for="Categoria">
+            <option>Marmitas</option>
+            <option>Bebidas</option>
+            <option>Adicionais</option>
+        </select></label><label>Preço unitário (R$)<input asp-for="PrecoUnitario" type="text"
+                                                          inputmode="decimal" placeholder="18,90" required /></label></div>
+        <div class="form-grid"><label>Estoque em unidades<input asp-for="EstoqueInsumo" min="0" max="1000000"
+                                                                    required /></label><label>Fotografia ilustrativa<select asp-for="Imagem">@foreach(var foto in
+            ProductImages.Opcoes){
+                <option value="@foto.Key">@foto.Value</option>
+            }
+        </select></label></div><label
+        class="check"><input asp-for="ControlaEstoque" />Controlar estoque ao vender</label><label
+        class="check"><input asp-for="Ativo" />Produto ativo</label>
+        <p class="muted">O estoque representa unidades vendáveis. Para marmitas, pode representar porções disponíveis ou
+            conjuntos de embalagem reservados ao produto.</p>
+            <div class="actions"><button class="primary">Salvar produto</button><a href="/Produtos">Voltar</a></div>
+        </form>
+    </section>

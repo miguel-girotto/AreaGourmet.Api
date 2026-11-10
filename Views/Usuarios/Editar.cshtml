@@ -1,3 +1,18 @@
 @model UsuarioForm
-@{ViewData["Title"]=Model.Id==0?"Novo usuário":"Editar usuário";}
-<section class="page"><h1>@ViewData["Title"]</h1><form method="post" asp-action="Editar" asp-route-id="@Model.Id" class="form-card"><div asp-validation-summary="All" class="validation"></div><input asp-for="Id" type="hidden"/><label>Nome<input asp-for="Nome" required maxlength="100"/></label><label>E-mail<input asp-for="Email" required autocomplete="off"/></label><label>Senha @(Model.Id==0?"":"(deixe em branco para manter)")<input asp-for="Senha" minlength="10" maxlength="100" autocomplete="new-password"/></label><label>Perfil<select asp-for="Perfil"><option>Administrador</option><option>Caixa</option></select></label><label class="check"><input asp-for="Ativo"/>Usuário ativo</label><div class="actions"><button class="primary">Salvar usuário</button><a href="/Usuarios">Voltar</a></div></form></section>
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Novo usuário" : "Editar usuário";
+}
+<section class="page">
+    <h1>@ViewData["Title"]</h1>
+    <form method="post" asp-action="Editar" asp-route-id="@Model.Id" class="form-card">
+        <div asp-validation-summary="All" class="validation"></div><input asp-for="Id" type="hidden" /><label>Nome<input
+        asp-for="Nome" required maxlength="100" /></label><label>E-mail<input asp-for="Email" required
+                                                                              autocomplete="off" /></label><label>Senha @(Model.Id == 0 ? "" : "(deixe em branco para manter)")<input
+        asp-for="Senha" minlength="10" maxlength="100"
+        autocomplete="new-password" /></label><label>Perfil<select asp-for="Perfil">
+        <option>Administrador</option>
+        <option>Caixa</option>
+    </select></label><label class="check"><input asp-for="Ativo" />Usuário ativo</label>
+    <div class="actions"><button class="primary">Salvar usuário</button><a href="/Usuarios">Voltar</a></div>
+</form>
+</section>

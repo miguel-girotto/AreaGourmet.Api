@@ -1,14 +1,17 @@
 using AreaGourmet.Models;
 using Microsoft.EntityFrameworkCore;
 namespace AreaGourmet.Data;
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options) {
+
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+{
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<Cliente> Clientes => Set<Cliente>();
     public DbSet<Endereco> Enderecos => Set<Endereco>();
     public DbSet<Produto> Produtos => Set<Produto>();
     public DbSet<Pedido> Pedidos => Set<Pedido>();
     public DbSet<ItemPedido> ItensPedido => Set<ItemPedido>();
-    protected override void OnModelCreating(ModelBuilder m) {
+    protected override void OnModelCreating(ModelBuilder m)
+    {
         m.Entity<Usuario>().HasIndex(x => x.Email).IsUnique();
         m.Entity<Cliente>().HasIndex(x => x.Telefone).IsUnique();
         m.Entity<Pedido>().HasIndex(x => x.ChaveOperacao).IsUnique();

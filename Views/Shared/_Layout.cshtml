@@ -1,15 +1,132 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>@ViewData["Title"] · Área Gourmet</title>
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/></head>
-<body class="@(User.Identity?.IsAuthenticated==true?"app":"guest")">
-@if(User.Identity?.IsAuthenticated==true){
-<aside class="sidebar"><a class="brand" href="/"><img class="brand-logo" src="/images/area-gourmet-logo.png" alt="Logo Área Gourmet"/><span>@Restaurante.Value.Nome<small>RESTAURANTE · ASSIS / SP</small></span></a>
-<nav><a href="/Vendas" aria-label="Novo pedido" title="Novo pedido" class="@(ViewContext.RouteData.Values["controller"]?.ToString()=="Vendas"?"active":"")">@await Html.PartialAsync("_Icon","order") <span>Novo Pedido</span></a>
-<a href="/Produtos" aria-label="Cardápio" title="Cardápio">@await Html.PartialAsync("_Icon","menu") <span>Cardápio</span></a><a href="/Clientes" aria-label="Clientes" title="Clientes">@await Html.PartialAsync("_Icon","clients") <span>Clientes</span></a>
-@if(User.IsInRole("Administrador")){<a href="/Produtos/Estoque" aria-label="Estoque" title="Estoque">@await Html.PartialAsync("_Icon","stock") <span>Estoque</span></a><a href="/Relatorios" aria-label="Relatórios" title="Relatórios">@await Html.PartialAsync("_Icon","chart") <span>Relatórios</span></a><a href="/Usuarios" aria-label="Usuários" title="Usuários">@await Html.PartialAsync("_Icon","user") <span>Usuários</span></a>}<a href="/Restaurante" aria-label="Restaurante" title="Restaurante">@await Html.PartialAsync("_Icon","home") <span>Restaurante</span></a><form class="nav-logout" asp-controller="Conta" asp-action="Sair" method="post"><button title="Sair da conta" aria-label="Sair da conta">@await Html.PartialAsync("_Icon","logout")</button></form></nav>
-<div class="sidebar-contact"><small>DE DOMINGO A DOMINGO</small><a href="@Restaurante.Value.WhatsApp" target="_blank" rel="noopener noreferrer">@Restaurante.Value.Telefone</a><a href="@Restaurante.Value.Instagram" target="_blank" rel="noopener noreferrer">@Restaurante.Value.InstagramNome</a></div><div class="user"><span class="avatar">@User.Identity?.Name?[0]</span><div>@User.Identity?.Name<small>@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</small></div><form asp-controller="Conta" asp-action="Sair" method="post"><button class="logout" title="Sair">@await Html.PartialAsync("_Icon","logout")</button></form></div></aside>
-}
-<main class="main">@if(TempData["Mensagem"] is string msg){<div class="notice" role="status">@msg</div>}@RenderBody()</main>
-<script src="~/js/site.js" asp-append-version="true"></script>@await RenderSectionAsync("Scripts",required:false)
-</body></html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] · Área Gourmet</title>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body class="@(User.Identity?.IsAuthenticated == true ? "app" : "guest")">
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <aside class="sidebar">
+            <a class="brand" href="/">
+                <img
+                    class="brand-logo"
+                    src="/images/area-gourmet-logo.png"
+                    alt="Logo Área Gourmet" />
+
+                <span>
+                    @Restaurante.Value.Nome
+                    <small>RESTAURANTE · ASSIS / SP</small>
+                </span>
+            </a>
+
+            <nav>
+                <a
+                    href="/Vendas"
+                    aria-label="Novo pedido"
+                    title="Novo pedido"
+                    class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Vendas" ? "active" : "")">
+                    @await Html.PartialAsync("_Icon", "order")
+                    <span>Novo Pedido</span>
+                </a>
+
+                <a href="/Produtos" aria-label="Cardápio" title="Cardápio">
+                    @await Html.PartialAsync("_Icon", "menu")
+                    <span>Cardápio</span>
+                </a>
+
+                <a href="/Clientes" aria-label="Clientes" title="Clientes">
+                    @await Html.PartialAsync("_Icon", "clients")
+                    <span>Clientes</span>
+                </a>
+
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a href="/Produtos/Estoque" aria-label="Estoque" title="Estoque">
+                        @await Html.PartialAsync("_Icon", "stock")
+                        <span>Estoque</span>
+                    </a>
+
+                    <a href="/Relatorios" aria-label="Relatórios" title="Relatórios">
+                        @await Html.PartialAsync("_Icon", "chart")
+                        <span>Relatórios</span>
+                    </a>
+
+                    <a href="/Usuarios" aria-label="Usuários" title="Usuários">
+                        @await Html.PartialAsync("_Icon", "user")
+                        <span>Usuários</span>
+                    </a>
+                }
+
+                <a href="/Restaurante" aria-label="Restaurante" title="Restaurante">
+                    @await Html.PartialAsync("_Icon", "home")
+                    <span>Restaurante</span>
+                </a>
+
+                <form
+                    class="nav-logout"
+                    asp-controller="Conta"
+                    asp-action="Sair"
+                    method="post">
+                    <button title="Sair da conta" aria-label="Sair da conta">
+                        @await Html.PartialAsync("_Icon", "logout")
+                    </button>
+                </form>
+            </nav>
+
+            <div class="sidebar-contact">
+                <small>DE DOMINGO A DOMINGO</small>
+
+                <a
+                    href="@Restaurante.Value.WhatsApp"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    @Restaurante.Value.Telefone
+                </a>
+
+                <a
+                    href="@Restaurante.Value.Instagram"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    @Restaurante.Value.InstagramNome
+                </a>
+            </div>
+
+            <div class="user">
+                <span class="avatar">@User.Identity?.Name?[0]</span>
+
+                <div>
+                    @User.Identity?.Name
+                    <small>
+                        @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+                    </small>
+                </div>
+
+                <form asp-controller="Conta" asp-action="Sair" method="post">
+                    <button class="logout" title="Sair" aria-label="Sair da conta">
+                        @await Html.PartialAsync("_Icon", "logout")
+                    </button>
+                </form>
+            </div>
+        </aside>
+    }
+
+    <main class="main">
+        @if (TempData["Mensagem"] is string msg)
+        {
+            <div class="notice" role="status">@msg</div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
