@@ -112,8 +112,6 @@
 
                     <div class="product-photo">
                         <img src="@ProductImages.Url(p.Imagem)" alt="Foto ilustrativa de @p.Nome" loading="lazy" />
-
-                        <span class="photo-caption">Foto ilustrativa</span>
                     </div>
 
                     <div class="product-info">
@@ -162,13 +160,6 @@
                 </a>
             </div>
         </footer>
-
-        @if (Restaurante.Value.CardapioDemonstrativo)
-        {
-            <p class="photo-disclaimer">
-                Cardápio e preços demonstrativos · fotografias ilustrativas.
-            </p>
-        }
     </section>
 
     <aside class="cart">
