@@ -16,7 +16,7 @@ public class ContaController(AppDbContext db, IPasswordHasher<Usuario> hasher) :
     [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Login(LoginForm form)
     {
-        if (!ModelState.IsValid) 
+        if (!ModelState.IsValid)
             return View(form);
 
         var email = form.Email.Trim().ToLowerInvariant();
@@ -24,27 +24,27 @@ public class ContaController(AppDbContext db, IPasswordHasher<Usuario> hasher) :
 
         if (user != null && hasher.VerifyHashedPassword(user, user.SenhaHash, form.Senha) != PasswordVerificationResult.Failed)
         {
-            var claims = new[] { 
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
-                new Claim(ClaimTypes.Name, user.Nome), 
-                new Claim(ClaimTypes.Role, user.Perfil), 
+            var claims = new[] {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Nome),
+                new Claim(ClaimTypes.Role, user.Perfil),
                 new Claim("stamp", user.SecurityStamp) };
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                                 new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)));
             return RedirectToAction("Index", "Vendas");
         }
-        
+
         await Task.Delay(350);
 
-        ModelState.AddModelError("", "E-mail ou senha inválidos."); 
+        ModelState.AddModelError("", "E-mail ou senha inválidos.");
         return View(form);
     }
 
-    [HttpPost, Authorize] public async Task<IActionResult> Sair() 
-    { 
-        await HttpContext.SignOutAsync(); 
-        return RedirectToAction(nameof(Login)); 
+    [HttpPost, Authorize] public async Task<IActionResult> Sair()
+    {
+        await HttpContext.SignOutAsync();
+        return RedirectToAction(nameof(Login));
     }
 
     public IActionResult Negado() { Response.StatusCode = 403; return View(); }

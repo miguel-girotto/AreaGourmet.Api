@@ -30,7 +30,7 @@ public class ProdutosController(AppDbContext db) : Controller
     {
         if (id is null) 
             return View(new Produto()); 
-            
+
         var p = await db.Produtos.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id); 
         
         if (p is not null) 

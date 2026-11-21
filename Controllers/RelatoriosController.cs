@@ -36,29 +36,28 @@ public class RelatoriosController(AppDbContext db) : Controller
 
         vm.Vendas = pedidos
             .Select(p => new VendaLinha(
-                p.Id, 
-                TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(p.DataHora, DateTimeKind.Utc), tz), 
-                p.Cliente?.Nome ?? "Balcão", 
-                p.Usuario.Nome, 
-                p.TipoAtendimento, 
-                p.FormatoPagamento, 
-                p.Itens.Sum(i => i.Quantidade), 
-                p.Itens.Sum(i => i.Quantidade * i.PrecoPraticado), 
-                p.TaxaEntrega, 
-                p.ValorTotal)
-                )
+                p.Id,
+                TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(p.DataHora, DateTimeKind.Utc), tz),
+                p.Cliente?.Nome ?? "Balcão",
+                p.Usuario.Nome,
+                p.TipoAtendimento,
+                p.FormatoPagamento,
+                p.Itens.Sum(i => i.Quantidade),
+                p.Itens.Sum(i => i.Quantidade * i.PrecoPraticado),
+                p.TaxaEntrega,
+                p.ValorTotal))
             .ToList();
 
         vm.Pagamentos = vm.Vendas.GroupBy(x => x.Pagamento)
                 .Select(g => new Grupo(g.Key, g.Sum(x => x.Total)))
                 .ToList();
 
-        for (var month = new DateTime(a.Year, a.Month, 1); month <= b; month = month.AddMonths(1)) 
+        for (var month = new DateTime(a.Year, a.Month, 1); month <= b; month = month.AddMonths(1))
             vm.Meses.Add(month.ToString("yyyy-MM"));
 
-        var items = pedidos.SelectMany(p => p.Itens.Select(i => new { 
-            Mes = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(p.DataHora, DateTimeKind.Utc), tz).ToString("yyyy-MM"), 
-            Categoria = i.CategoriaPraticada, 
+        var items = pedidos.SelectMany(p => p.Itens.Select(i => new {
+            Mes = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(p.DataHora, DateTimeKind.Utc), tz).ToString("yyyy-MM"),
+            Categoria = i.CategoriaPraticada,
             Valor = i.Quantidade * i.PrecoPraticado }));
 
         vm.Pivot = items.GroupBy(x => x.Categoria)

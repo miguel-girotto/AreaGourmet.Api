@@ -100,15 +100,16 @@ public class ClientesController(AppDbContext db) : Controller
         if (!User.IsInRole("Administrador")) 
             form.Ativo = true;
 
-        if (!ModelState.IsValid) 
+        if (!ModelState.IsValid)
             return View(form);
 
-        if (form.Id == 0) 
+        if (form.Id == 0)
             db.Enderecos.Add(form);
 
         else
         {
-            var e = await db.Enderecos.FirstOrDefaultAsync(x => x.Id == form.Id && x.ClienteId == form.ClienteId); 
+            var e = await db.Enderecos.FirstOrDefaultAsync(x => x.Id == form.Id && x.ClienteId == form.ClienteId);
+
             if (e is null) 
                 return NotFound();
 
@@ -120,7 +121,7 @@ public class ClientesController(AppDbContext db) : Controller
             e.Ativo = form.Ativo;
         }
         await db.SaveChangesAsync(); 
-        
+
         return RedirectToAction(nameof(Editar), new { id = form.ClienteId });
     }
 
